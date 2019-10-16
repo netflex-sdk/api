@@ -37,10 +37,10 @@ class API
    * @param ResponseInterface $response
    * @return mixed
    */
-  private function parseResponse(ResponseInterface $response)
+  private function parseResponse(ResponseInterface $response, $assoc = false)
   {
     $body = $response->getBody();
-    $jsonBody = json_decode($body);
+    $jsonBody = json_decode($body, $assoc);
 
     if (json_last_error() === JSON_ERROR_NONE) {
       return $jsonBody;
@@ -51,39 +51,45 @@ class API
 
   /**
    * @param string $url
+   * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
-  public function get($url)
+  public function get($url, $assoc = false)
   {
     return $this->parseResponse(
-      $this->client->get($url)
+      $this->client->get($url),
+      $assoc
     );
   }
 
   /**
    * @param string $url
    * @param array $payload = []
+   * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
-  public function put($url, $payload = [])
+  public function put($url, $payload = [], $assoc = false)
   {
     return $this->parseResponse(
-      $this->client->put($url, ['json' => $payload])
+      $this->client->put($url, ['json' => $payload]),
+      $assoc
     );
   }
 
   /**
    * @param string $url
    * @param array $payload = []
+   * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
-  public function post($url, $payload = [])
+  public function post($url, $payload = [], $assoc = false)
   {
     return $this->parseResponse(
-      $this->client->post($url, ['json' => $payload])
+      $this->client->post($url, ['json' => $payload]),
+      $assoc
     );
   }
 
@@ -92,10 +98,11 @@ class API
    * @return mixed
    * @throws Exception
    */
-  public function delete($url)
+  public function delete($url, $assoc = false)
   {
     return $this->parseResponse(
-      $this->client->delete($url)
+      $this->client->delete($url),
+      $assoc
     );
   }
 
