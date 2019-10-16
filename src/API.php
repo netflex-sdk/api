@@ -40,10 +40,19 @@ class API
   private function parseResponse(ResponseInterface $response, $assoc = false)
   {
     $body = $response->getBody();
-    $jsonBody = json_decode($body, $assoc);
 
-    if (json_last_error() === JSON_ERROR_NONE) {
-      return $jsonBody;
+    $contentType = strtolower($response->getHeaderLine('Content-Type'));
+
+    if (strpos($contentType, 'json') !== false) {
+      $jsonBody = json_decode($body, $assoc);
+
+      if (json_last_error() === JSON_ERROR_NONE) {
+        return $jsonBody;
+      }
+    }
+
+    if (strpos($contentType, 'text') !== false) {
+      return $body->getContents();
     }
 
     return null;
