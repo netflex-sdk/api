@@ -4,6 +4,7 @@ namespace Netflex;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class API
@@ -133,6 +134,16 @@ class API
    */
   public static function factory (string $publicKey, string $privateKey, $options = []) {
     return new static ($publicKey, $privateKey, $options);
+  }
+
+  /**
+   * Override the shared client instance. Useful for doing mocks in testing.
+   *
+   * @param ClientInterface $client
+   * @return void
+   */
+  public static function setClient (ClientInterface $client) {
+    static::$instance = $client;
   }
 
   /**
