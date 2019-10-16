@@ -136,6 +136,16 @@ class API
   }
 
   /**
+   * Override the shared client instance. Useful for doing mocks in testing.
+   *
+   * @param stdClass $client
+   * @return void
+   */
+  public static function setClient ($client) {
+    static::$instance = $client;
+  }
+
+  /**
    * @throws Exception
    * @return static
    */
