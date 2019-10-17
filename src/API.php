@@ -73,6 +73,15 @@ class API
   }
 
   /**
+   * Returns the raw internal Guzzle instance
+   *
+   * @return Client
+   */
+  public function getGuzzleInstance () {
+    return $this->client;
+  }
+
+  /**
    * @param string $url
    * @param array $payload = []
    * @param boolean $assoc = false
