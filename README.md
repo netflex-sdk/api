@@ -1,7 +1,7 @@
 # Netflex API Client
 
 ## Setup
-`composer require apility/netflex-api`
+`composer require netflex/api`
 
 ## Usage
 
