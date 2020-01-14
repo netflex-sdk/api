@@ -1,5 +1,6 @@
 {
   "name": "netflex/api",
+  "description": "Netflex API library",
   "type": "library",
   "license": "MIT",
   "authors": [
