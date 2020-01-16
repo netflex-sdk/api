@@ -2,11 +2,14 @@
 
 namespace Netflex;
 
-use Exception;
+use Netflex\Contracts\ApiClient;
+
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException as Exception;
+
 use Psr\Http\Message\ResponseInterface;
 
-class API
+class API implements ApiClient
 {
   /** @var static */
   private static $instance;
@@ -28,7 +31,7 @@ class API
   private function __construct(string $publicKey, string $privateKey, array $options = [])
   {
     $options['base_uri'] = $this->baseURI;
-    $options['auth'] = [ $publicKey, $privateKey ];
+    $options['auth'] = [$publicKey, $privateKey];
 
     $this->client = new Client($options);
   }
@@ -77,7 +80,8 @@ class API
    *
    * @return Client
    */
-  public function getGuzzleInstance () {
+  public function getGuzzleInstance()
+  {
     return $this->client;
   }
 
@@ -140,8 +144,9 @@ class API
    * @param array $options = []
    * @return static
    */
-  public static function factory (string $publicKey, string $privateKey, $options = []) {
-    return new static ($publicKey, $privateKey, $options);
+  public static function factory(string $publicKey, string $privateKey, $options = [])
+  {
+    return new static($publicKey, $privateKey, $options);
   }
 
   /**
@@ -150,7 +155,8 @@ class API
    * @param stdClass $client
    * @return void
    */
-  public static function setClient ($client) {
+  public static function setClient($client)
+  {
     static::$instance = $client;
   }
 

@@ -1,5 +1,6 @@
 {
   "name": "netflex/api",
+  "description": "Netflex API library",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -15,8 +16,5 @@
     "psr-4": {
       "Netflex\\": "src/"
     }
-  },
-  "require-dev": {
-    "vlucas/phpdotenv": "^3.6"
   }
 }
