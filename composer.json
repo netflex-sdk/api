@@ -16,8 +16,5 @@
     "psr-4": {
       "Netflex\\": "src/"
     }
-  },
-  "require-dev": {
-    "vlucas/phpdotenv": "^3.6"
   }
 }
