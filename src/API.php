@@ -3,6 +3,7 @@
 namespace Netflex;
 
 use Netflex\Contracts\ApiClient;
+use Netflex\Exceptions\MissingCredentialsException;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException as Exception;
@@ -175,6 +176,6 @@ class API implements ApiClient
       return static::$instance;
     }
 
-    throw new Exception('Missing credentials');
+    throw new MissingCredentialsException;
   }
 }
