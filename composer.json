@@ -10,11 +10,25 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^6.3"
+    "guzzlehttp/guzzle": "^6.3",
+    "illuminate/support": "^6.12"
+  },
+  "require-dev": {
+    "illuminate/container": "^6.12"
   },
   "autoload": {
     "psr-4": {
-      "Netflex\\": "src/"
+      "Netflex\\API\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Netflex\\API\\Providers\\APIServiceProvider"
+      ],
+      "aliases": {
+        "API": "Netflex\\API\\Facades\\API"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Netflex\Exceptions;
+namespace Netflex\API\Exceptions;
 
 use Exception;
 
