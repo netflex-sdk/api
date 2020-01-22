@@ -16,7 +16,7 @@ class Client implements APIClient
   protected $client;
 
   /** @var String */
-  protected $baseURI = 'https://api.netflexapp.com/v1/';
+  const BASE_URI = 'https://api.netflexapp.com/v1/';
 
   /**
    * @param string $publicKey
@@ -25,7 +25,7 @@ class Client implements APIClient
    */
   public function __construct(array $options = [])
   {
-    $options['base_uri'] = $options['base_uri'] ?? $this->baseURI;
+    $options['base_uri'] = $options['base_uri'] ?? static::BASE_URI;
     $options['auth'] = $options['auth'] ?? null;
 
     if (!$options['auth']) {
