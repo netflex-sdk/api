@@ -2,6 +2,8 @@
 
 namespace Netflex\API;
 
+use Netflex\API\Traits\ParsesResponse;
+
 use Netflex\API\Contracts\APIClient;
 use Netflex\API\Exceptions\MissingCredentialsException;
 
@@ -12,6 +14,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client implements APIClient
 {
+  use ParsesResponse;
+
   /** @var Client */
   protected $client;
 
@@ -33,31 +37,6 @@ class Client implements APIClient
     }
 
     $this->client = new GuzzleClient($options);
-  }
-
-  /**
-   * @param ResponseInterface $response
-   * @return mixed
-   */
-  private function parseResponse(ResponseInterface $response, $assoc = false)
-  {
-    $body = $response->getBody();
-
-    $contentType = strtolower($response->getHeaderLine('Content-Type'));
-
-    if (strpos($contentType, 'json') !== false) {
-      $jsonBody = json_decode($body, $assoc);
-
-      if (json_last_error() === JSON_ERROR_NONE) {
-        return $jsonBody;
-      }
-    }
-
-    if (strpos($contentType, 'text') !== false) {
-      return $body->getContents();
-    }
-
-    return null;
   }
 
   /**
