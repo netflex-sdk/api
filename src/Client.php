@@ -1,40 +1,38 @@
 <?php
 
-namespace Netflex;
+namespace Netflex\API;
 
-use Netflex\Contracts\ApiClient;
-use Netflex\Exceptions\MissingCredentialsException;
+use Netflex\API\Contracts\APIClient;
+use Netflex\API\Exceptions\MissingCredentialsException;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
 
 use Psr\Http\Message\ResponseInterface;
 
-class API implements ApiClient
+class Client implements APIClient
 {
-  /** @var static */
-  private static $instance;
-
-  /** @var array|null */
-  private static $credentials;
-
   /** @var Client */
   protected $client;
 
   /** @var String */
-  protected $baseURI = 'https://api.netflexapp.com/v1/';
+  const BASE_URI = 'https://api.netflexapp.com/v1/';
 
   /**
    * @param string $publicKey
    * @param string $privateKey
    * @param array $options
    */
-  private function __construct(string $publicKey, string $privateKey, array $options = [])
+  public function __construct(array $options = [])
   {
-    $options['base_uri'] = $this->baseURI;
-    $options['auth'] = [$publicKey, $privateKey];
+    $options['base_uri'] = $options['base_uri'] ?? static::BASE_URI;
+    $options['auth'] = $options['auth'] ?? null;
 
-    $this->client = new Client($options);
+    if (!$options['auth']) {
+      throw new MissingCredentialsException;
+    }
+
+    $this->client = new GuzzleClient($options);
   }
 
   /**
@@ -79,7 +77,7 @@ class API implements ApiClient
   /**
    * Returns the raw internal Guzzle instance
    *
-   * @return Client
+   * @return GuzzleClient
    */
   public function getGuzzleInstance()
   {
@@ -127,55 +125,5 @@ class API implements ApiClient
       $this->client->delete($url),
       $assoc
     );
-  }
-
-  /**
-   * @param string $publicKey
-   * @param string $privateKey
-   * @return void
-   */
-  public static function setCredentials(string $publicKey, string $privateKey)
-  {
-    static::$credentials = [$publicKey, $privateKey];
-  }
-
-  /**
-   * @param string $publicKey
-   * @param string $privateKey
-   * @param array $options = []
-   * @return static
-   */
-  public static function factory(string $publicKey, string $privateKey, $options = [])
-  {
-    return new static($publicKey, $privateKey, $options);
-  }
-
-  /**
-   * Override the shared client instance. Useful for doing mocks in testing.
-   *
-   * @param stdClass $client
-   * @return void
-   */
-  public static function setClient($client)
-  {
-    static::$instance = $client;
-  }
-
-  /**
-   * @throws Exception
-   * @return static
-   */
-  public static function getClient()
-  {
-    if (!static::$instance && static::$credentials) {
-      list($publicKey, $privateKey) = static::$credentials;
-      static::$instance = static::factory($publicKey, $privateKey);
-    }
-
-    if (static::$instance) {
-      return static::$instance;
-    }
-
-    throw new MissingCredentialsException;
   }
 }

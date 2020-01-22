@@ -1,8 +1,8 @@
 <?php
 
-namespace Netflex\Contracts;
+namespace Netflex\API\Contracts;
 
-interface ApiClient
+interface APIClient
 {
   /**
    * @param string $url

@@ -1,13 +1,100 @@
-# Netflex API Client
+# Netflex API
 
-## Setup
-`composer require netflex/api`
+A library for working with the Netflex API.
 
-## Usage
+<a href="https://packagist.org/packages/netflex/api"><img src="https://img.shields.io/packagist/v/netflex/api?label=stable" alt="Stable version"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/netflex-sdk/api.svg" alt="License: MIT"></a>
+<a href="https://packagist.org/packages/netflex/api/stats"><img src="https://img.shields.io/packagist/dm/netflex/api" alt="Downloads"></a>
+
+## Table of contents
+
+- [Heading](#installation)
+  + [Setup](#1-setup)
+  + [Provider](#2-provider)
+  + [Facades](#3-facades)
+  + [Configuration](#4-configuration)
+- [Standalone usage](#standalone-usage)
+
+Installation
+------------
+
+### 1. Setup
+
+```shell
+composer require netflex/api
+```
+
+> **Note**: If you are using [Netflex SDK](https://github.com/netflex-sdk/sdk) 2.0 or Laravel 5.5, the steps 2 and 3, for providers and aliases, are unnecessaries. Netflex API supports [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
+
+### 2. Provider
+
+You need to update your application configuration in order to register the package so it can be loaded by Laravel, just update your `config/app.php` file adding the following code at the end of your `'providers'` section:
+
+> `config/app.php`
 
 ```php
-use Netflex\API;
+<?php
 
-API::setCredentials($publicKey, $privateKey);
-$client = API::getClient();
+return [
+    // ...
+    'providers' => [
+        Netflex\API\Providers\APIServiceProvider::class,
+        // ...
+    ],
+    // ...
+];
+```
+
+### 3. Facades
+
+You may get access to the Netflex API using following facades:
+
+ - `Netflex\API\Facades\API`
+
+You can setup a short-version aliases for these facades in your `config/app.php` file. For example:
+
+```php
+<?php
+
+return [
+    // ...
+    'aliases' => [
+        'API'   => Netflex\API\Facades\API::class,
+        // ...
+    ],
+    // ...
+];
+```
+
+### 4. Configuration
+
+#### Publish config
+
+In your terminal type
+
+```shell
+php artisan vendor:publish
+```
+
+or
+
+```shell
+php artisan vendor:publish --provider="Netflex\API\Providers\APIServiceProvider"
+```
+
+Alternatively, you can create the config file manually, under `config/api.php`, [see example here](src/config/api.php).
+
+Standalone usage
+----------------
+
+Netflex API can be used standalone as well.
+
+```php
+<?php
+
+use Netflex\API\Client;
+
+$client = new Client([
+  'auth' => ['publicKey', 'privateKey']
+]);
 ```
