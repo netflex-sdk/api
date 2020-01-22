@@ -1,42 +1,68 @@
 <?php
 
-namespace Netflex\API;
+namespace Netflex\API\Testing;
 
 use Netflex\API\Traits\ParsesResponse;
 
 use Netflex\API\Contracts\APIClient;
-use Netflex\API\Exceptions\MissingCredentialsException;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Exception\RequestException;;
 
-use Psr\Http\Message\ResponseInterface;
-
-class Client implements APIClient
+class MockClient implements APIClient
 {
   use ParsesResponse;
 
   /** @var Client */
   protected $client;
 
-  /** @var String */
-  const BASE_URI = 'https://api.netflexapp.com/v1/';
+  /** @var MockHandler */
+  protected $mock;
+
+  /** @var HandlerStack */
+  protected $stack;
+
+  public function __construct()
+  {
+    $this->mock = new MockHandler();
+    $this->stack = HandlerStack::create($this->mock);
+    $this->client = new GuzzleClient(['handler' => $this->stack]);
+  }
 
   /**
-   * @param string $publicKey
-   * @param string $privateKey
-   * @param array $options
+   * Adds a Response to the mock queue
+   *
+   * @param Response $response
+   * @return void
    */
-  public function __construct(array $options = [])
+  public function mockResponse(Response $response)
   {
-    $options['base_uri'] = $options['base_uri'] ?? static::BASE_URI;
-    $options['auth'] = $options['auth'] ?? null;
+    $this->mock->append($response);
+  }
 
-    if (!$options['auth']) {
-      throw new MissingCredentialsException;
-    }
+  /**
+   * Adds a RequestException to the mock queue
+   *
+   * @param RequestException $e
+   * @return void
+   */
+  public function mockRequestException(RequestException $e)
+  {
+    $this->mock->append($e);
+  }
 
-    $this->client = new GuzzleClient($options);
+  /**
+   * Resets the mock queue
+   *
+   * @return void
+   */
+  public function reset()
+  {
+    $this->mock->reset();
   }
 
   /**
@@ -51,16 +77,6 @@ class Client implements APIClient
       $this->client->get($url),
       $assoc
     );
-  }
-
-  /**
-   * Returns the raw internal Guzzle instance
-   *
-   * @return GuzzleClient
-   */
-  public function getGuzzleInstance()
-  {
-    return $this->client;
   }
 
   /**

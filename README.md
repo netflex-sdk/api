@@ -14,6 +14,7 @@ A library for working with the Netflex API.
   + [Facades](#3-facades)
   + [Configuration](#4-configuration)
 - [Standalone usage](#standalone-usage)
+- [Testing](#testing)
 
 Installation
 ------------
@@ -98,3 +99,45 @@ $client = new Client([
   'auth' => ['publicKey', 'privateKey']
 ]);
 ```
+
+Testing
+-------
+
+For testing purposes, use the provided `Netflex\API\Testing\MockClient` implementation.
+This can be used with the Facade, so you don't have to modify your code while testing.
+
+To bind the MockClient into the container, register the  `Netflex\API\Testing\Providers\MockAPIServiceProvider` provider.
+
+### Example:
+
+```php
+<?php
+
+use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Facade;
+
+use Netflex\API\Facades\API;
+use Netflex\API\Testing\Providers\MockAPIServiceProvider;
+
+use GuzzleHttp\Psr7\Response;
+
+$container = new Container;
+
+Facade::setFacadeApplication($container);
+
+// Register the service provider
+(new MockAPIServiceProvider($container))->register();
+
+// The container binding is now registered, and you can use the Facade.
+
+API::mockResponse(
+  new Response(
+    200,
+    ['Content-Type' => 'application/json'],
+    json_encode(['hello' => 'world'])
+  )
+);
+
+$response = API::get('/'); // Returns the mocked response
+
+echo $response->hello; // Outputs 'world'
