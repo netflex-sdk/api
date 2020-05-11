@@ -21,8 +21,6 @@
       "Netflex\\API\\": "src/"
     }
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "extra": {
     "laravel": {
       "providers": [
