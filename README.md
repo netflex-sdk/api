@@ -6,6 +6,8 @@ A library for working with the Netflex API.
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/netflex-sdk/api.svg" alt="License: MIT"></a>
 <a href="https://packagist.org/packages/netflex/api/stats"><img src="https://img.shields.io/packagist/dm/netflex/api" alt="Downloads"></a>
 
+[Documentation](https://netflex-sdk.github.io/#/docs/api)
+
 ## Table of contents
 
 - [Heading](#installation)
