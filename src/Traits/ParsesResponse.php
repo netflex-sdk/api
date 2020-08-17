@@ -4,7 +4,8 @@ namespace Netflex\API\Traits;
 
 use Psr\Http\Message\ResponseInterface;
 
-trait ParsesResponse {
+trait ParsesResponse
+{
   /**
    * @param ResponseInterface $response
    * @return mixed

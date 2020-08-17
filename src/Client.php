@@ -16,7 +16,7 @@ class Client implements APIClient
 {
   use ParsesResponse;
 
-  /** @var Client */
+  /** @var GuzzleClient */
   protected $client;
 
   /** @var String */
@@ -40,20 +40,6 @@ class Client implements APIClient
   }
 
   /**
-   * @param string $url
-   * @param boolean $assoc = false
-   * @return mixed
-   * @throws Exception
-   */
-  public function get($url, $assoc = false)
-  {
-    return $this->parseResponse(
-      $this->client->get($url),
-      $assoc
-    );
-  }
-
-  /**
    * Returns the raw internal Guzzle instance
    *
    * @return GuzzleClient
@@ -63,34 +49,82 @@ class Client implements APIClient
     return $this->client;
   }
 
+  protected function buildPayload($payload)
+  {
+    return ['json' => $payload];
+  }
+
   /**
    * @param string $url
-   * @param array $payload = []
+   * @return ResponseInterface
+   */
+  public function getRaw($url)
+  {
+    return $this->client->get($url);
+  }
+
+  /**
+   * @param string $url
+   * @param boolean $assoc = false
+   * @return mixed
+   * @throws Exception
+   */
+  public function get($url, $assoc = false)
+  {
+    return $this->parseResponse($this->getRaw($url), $assoc);
+  }
+
+  /**
+   * @param string $url
+   * @param array|null $payload = []
+   * @return ResponseInterface
+   */
+  public function putRaw($url, $payload)
+  {
+    return $this->client->put($url, $this->buildPayload($payload));
+  }
+
+  /**
+   * @param string $url
+   * @param array|null $payload = []
    * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
   public function put($url, $payload = [], $assoc = false)
   {
-    return $this->parseResponse(
-      $this->client->put($url, ['json' => $payload]),
-      $assoc
-    );
+    return $this->parseResponse($this->putRaw($url, $payload), $assoc);
   }
 
   /**
    * @param string $url
-   * @param array $payload = []
+   * @param array|null $payload = []
+   * @return ResponseInterface
+   */
+  public function postRaw($url, $payload)
+  {
+    return $this->client->post($url, $this->buildPayload($payload));
+  }
+
+  /**
+   * @param string $url
+   * @param array|null $payload = []
    * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
   public function post($url, $payload = [], $assoc = false)
   {
-    return $this->parseResponse(
-      $this->client->post($url, ['json' => $payload]),
-      $assoc
-    );
+    return $this->parseResponse($this->postRaw($url, $payload), $assoc);
+  }
+
+  /**
+   * @param string $url
+   * @return ResponseInterface
+   */
+  public function deleteRaw($url)
+  {
+    return $this->client->delete($url);
   }
 
   /**
@@ -100,9 +134,6 @@ class Client implements APIClient
    */
   public function delete($url, $assoc = false)
   {
-    return $this->parseResponse(
-      $this->client->delete($url),
-      $assoc
-    );
+    return $this->parseResponse($this->deleteRaw($url), $assoc);
   }
 }
