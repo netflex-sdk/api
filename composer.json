@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^6.3",
+    "guzzlehttp/guzzle": "^7.0",
     "illuminate/support": "^8.0"
   },
   "require-dev": {
@@ -21,8 +21,6 @@
       "Netflex\\API\\": "src/"
     }
   },
-  "prefer-stable": true,
-  "minimum-stability": "dev",
   "extra": {
     "laravel": {
       "providers": [
