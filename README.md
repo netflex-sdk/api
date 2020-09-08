@@ -27,7 +27,7 @@ Installation
 composer require netflex/api
 ```
 
-> **Note**: If you are using [Netflex SDK](https://github.com/netflex-sdk/sdk) 2.0 or Laravel 5.5, the steps 2 and 3, for providers and aliases, are unnecessaries. Netflex API supports [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
+> **Note**: If you are using [Netflex SDK](https://github.com/netflex-sdk/sdk) 2.0 or later, or Laravel 5.5, the steps 2 and 3, for providers and aliases, are unnecessaries. Netflex API supports [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
 
 ### 2. Provider
 
