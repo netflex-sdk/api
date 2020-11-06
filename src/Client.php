@@ -11,10 +11,12 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
 
 use Psr\Http\Message\ResponseInterface;
+use Illuminate\Support\Traits\Macroable;
 
 class Client implements APIClient
 {
   use ParsesResponse;
+  use Macroable;
 
   /** @var GuzzleClient */
   protected $client;
