@@ -25,11 +25,14 @@ class Client implements APIClient
   const BASE_URI = 'https://api.netflexapp.com/v1/';
 
   /**
-   * @param string $publicKey
-   * @param string $privateKey
    * @param array $options
    */
   public function __construct(array $options = [])
+  {
+    $this->setCredentials($options);
+  }
+
+  public function setCredentials(array $options = [])
   {
     $options['base_uri'] = $options['base_uri'] ?? static::BASE_URI;
     $options['auth'] = $options['auth'] ?? null;
@@ -39,6 +42,8 @@ class Client implements APIClient
     }
 
     $this->client = new GuzzleClient($options);
+
+    return $this->client;
   }
 
   /**
