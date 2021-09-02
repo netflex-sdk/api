@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static mixed post(string $url, array $payload = [], bool $assoc = false)
  * @method static mixed delete(string $url, bool $assoc = false)
  * @method static mixed setCredentials(array $options)
+ * @method static \Netflex\API\Contracts\APIClient connection(string $connection)
  *
  * @see \Netflex\API\Client
  */
