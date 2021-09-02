@@ -6,6 +6,7 @@ use Netflex\API\Traits\ParsesResponse;
 
 use Netflex\API\Contracts\APIClient;
 use Netflex\API\Exceptions\MissingCredentialsException;
+use Netflex\API\Facades\APIClientConnectionResolver;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
@@ -27,9 +28,7 @@ class Client implements APIClient
 
   public static function connection ($connection = 'default')
   {
-    /** @var ClientResolver $resolver */
-    $resolver = App::make(ClientResolver::class);
-    return $resolver->resolve($connection);
+    return APIClientConnectionResolver::resolve($connection);
   }
 
   /**

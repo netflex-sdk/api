@@ -14,7 +14,12 @@ class APIServiceProvider extends ServiceProvider
 {
   public function register()
   {
-    $this->app->bind(ClientResolver::class, APIClientResolver::class);
+    $this->app->alias('api.client.resolver', ClientResolver::class);
+    $this->app->alias('api.client.resolver', APIClientResolver::class);
+
+    $this->app->singleton('api.client.resolver', function () {
+      return new APIClientResolver;
+    });
 
     $this->app->alias('api.client', Client::class);
     $this->app->alias('api.client', APIClient::class);
