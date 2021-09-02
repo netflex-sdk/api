@@ -9,9 +9,10 @@ use Netflex\API\Exceptions\MissingCredentialsException;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
-
+use Illuminate\Support\Facades\App;
 use Psr\Http\Message\ResponseInterface;
 use Illuminate\Support\Traits\Macroable;
+use Netflex\API\Contracts\ClientResolver;
 
 class Client implements APIClient
 {
@@ -23,6 +24,13 @@ class Client implements APIClient
 
   /** @var String */
   const BASE_URI = 'https://api.netflexapp.com/v1/';
+
+  public static function connection ($connection = 'default')
+  {
+    /** @var ClientResolver $resolver */
+    $resolver = App::make(ClientResolver::class);
+    return $resolver->resolve($connection);
+  }
 
   /**
    * @param array $options

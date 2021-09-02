@@ -27,4 +27,22 @@ return [
    */
 
    'baseUri' => env('NETFLEX_URI', 'https://api.netflexapp.com/v1/'),
+
+  /*
+   |--------------------------------------------------------------------------
+   | Connections
+   |--------------------------------------------------------------------------
+   |
+   | Here you can specify the different API connections. If 'default' isn't
+   | specified, the default connection will be set using the legacy auth scheme.
+   |
+   */
+
+   'connections' => [
+     'default' => [
+       'baseUri' => env('NETFLEX_URI', 'https://api.netflexapp.com/v1/'),
+       'publicKey' => env('NETFLEX_PUBLIC_KEY', null),
+       'privateKey' => env('NETFLEX_PRIVATE_KEY', null),
+     ]
+   ],
 ];
