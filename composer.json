@@ -10,8 +10,8 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "^7.0",
-    "illuminate/support": "^8.0"
+    "illuminate/support": "^8.0",
+    "netflex/http": "^1.0"
   },
   "require-dev": {
     "illuminate/container": "^8.0"
