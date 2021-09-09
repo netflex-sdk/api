@@ -16,7 +16,6 @@ use Illuminate\Support\Traits\Macroable;
 
 class MockClient implements APIClient
 {
-  use ParsesResponse;
   use Macroable;
 
   /** @var Client */
@@ -28,11 +27,31 @@ class MockClient implements APIClient
   /** @var HandlerStack */
   protected $stack;
 
+  protected $connection = 'mock';
+
   public function __construct()
   {
     $this->mock = new MockHandler();
     $this->stack = HandlerStack::create($this->mock);
     $this->client = new GuzzleClient(['handler' => $this->stack]);
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getConnectionName ()
+  {
+    return $this->connection;
+  }
+
+  /**
+   * @param string|null $connection
+   * @return static
+   */
+  public function setConnectionName ($connection)
+  {
+    $this->connection = $connection;
+    return $this;
   }
 
   /**
