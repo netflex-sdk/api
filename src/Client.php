@@ -15,6 +15,26 @@ class Client extends HttpClient implements APIClient
 {
   use Macroable;
 
+  protected $connection = 'default';
+
+  /**
+   * @return string|null
+   */
+  public function getConnectionName ()
+  {
+    return $this->connection;
+  }
+
+  /**
+   * @param string|null $connection
+   * @return static
+   */
+  public function setConnectionName ($connection)
+  {
+    $this->connection = $connection;
+    return $this;
+  }
+
   /** @var String */
   const BASE_URI = 'https://api.netflexapp.com/v1/';
 
