@@ -2,8 +2,8 @@
 
 namespace Netflex\API\Testing;
 
-use Netflex\API\Traits\ParsesResponse;
 use Netflex\API\Contracts\APIClient;
+use Netflex\Http\Concerns\ParsesResponse;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
@@ -16,6 +16,7 @@ use Illuminate\Support\Traits\Macroable;
 
 class MockClient implements APIClient
 {
+  use ParsesResponse;
   use Macroable;
 
   /** @var Client */
