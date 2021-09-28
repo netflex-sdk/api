@@ -20,7 +20,7 @@ class Client extends HttpClient implements APIClient
   /**
    * @return string|null
    */
-  public function getConnectionName ()
+  public function getConnectionName()
   {
     return $this->connection;
   }
@@ -29,7 +29,7 @@ class Client extends HttpClient implements APIClient
    * @param string|null $connection
    * @return static
    */
-  public function setConnectionName ($connection)
+  public function setConnectionName($connection)
   {
     $this->connection = $connection;
     return $this;
@@ -38,9 +38,16 @@ class Client extends HttpClient implements APIClient
   /** @var String */
   const BASE_URI = 'https://api.netflexapp.com/v1/';
 
-  public static function connection ($connection = 'default')
+  public static function connection($connection = 'default')
   {
     return APIClientConnectionResolver::resolve($connection);
+  }
+
+  public static function withCredentials($credentials)
+  {
+    return new static([
+      'auth' => $credentials
+    ]);
   }
 
   /**
