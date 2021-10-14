@@ -9,16 +9,17 @@ use Psr\Http\Message\ResponseInterface;
 class API
 {
   /** @var static */
-  private static $instance;
+  protected static $instance;
 
   /** @var array|null */
-  private static $credentials;
+  protected static $credentials;
+
+  /** @var String */
+  protected static $baseURI = 'https://api.netflexapp.com/v1/';
 
   /** @var Client */
   protected $client;
 
-  /** @var String */
-  protected $baseURI = 'https://api.netflexapp.com/v1/';
 
   /**
    * @param string $publicKey
@@ -27,7 +28,7 @@ class API
    */
   private function __construct(string $publicKey, string $privateKey, array $options = [])
   {
-    $options['base_uri'] = $this->baseURI;
+    $options['base_uri'] = self::$baseURI;
     $options['auth'] = [ $publicKey, $privateKey ];
 
     $this->client = new Client($options);
@@ -122,6 +123,18 @@ class API
       $this->client->delete($url),
       $assoc
     );
+  }
+
+  /**
+   *
+   * Sets the BaseURI for the client.
+   * To ensure that this step does not fail, we retain the old url if the supplid string is null.
+   *
+   *
+   * @param ?string $uri
+   */
+  public static function setBaseURI(string $uri) {
+    static::$baseURI = $uri ?: static::$baseURI;
   }
 
   /**
