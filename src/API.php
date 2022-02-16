@@ -29,7 +29,7 @@ class API
   private function __construct(string $publicKey, string $privateKey, array $options = [])
   {
     $options['base_uri'] = self::$baseURI;
-    $options['auth'] = [ $publicKey, $privateKey ];
+    $options['auth'] = [$publicKey, $privateKey];
 
     $this->client = new Client($options);
   }
@@ -45,7 +45,7 @@ class API
     $contentType = strtolower($response->getHeaderLine('Content-Type'));
 
     if (strpos($contentType, 'json') !== false) {
-      $jsonBody = json_decode($body, $assoc);
+      $jsonBody = json_decode(html_entity_decode((string) $body), $assoc);
 
       if (json_last_error() === JSON_ERROR_NONE) {
         return $jsonBody;
@@ -78,7 +78,8 @@ class API
    *
    * @return Client
    */
-  public function getGuzzleInstance () {
+  public function getGuzzleInstance()
+  {
     return $this->client;
   }
 
@@ -133,7 +134,8 @@ class API
    *
    * @param ?string $uri
    */
-  public static function setBaseURI(string $uri) {
+  public static function setBaseURI(string $uri)
+  {
     static::$baseURI = $uri ?: static::$baseURI;
   }
 
@@ -153,8 +155,9 @@ class API
    * @param array $options = []
    * @return static
    */
-  public static function factory (string $publicKey, string $privateKey, $options = []) {
-    return new static ($publicKey, $privateKey, $options);
+  public static function factory(string $publicKey, string $privateKey, $options = [])
+  {
+    return new static($publicKey, $privateKey, $options);
   }
 
   /**
@@ -163,7 +166,8 @@ class API
    * @param stdClass $client
    * @return void
    */
-  public static function setClient ($client) {
+  public static function setClient($client)
+  {
     static::$instance = $client;
   }
 
