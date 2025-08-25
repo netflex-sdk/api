@@ -26,12 +26,12 @@ class Client extends HttpClient implements APIClient
   }
 
   /**
-   * @param string|null $connection
+   * @param string|null $name
    * @return static
    */
-  public function setConnectionName($connection)
+  public function setConnectionName(?string $name)
   {
-    $this->connection = $connection;
+    $this->connection = $name;
     return $this;
   }
 
