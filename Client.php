@@ -20,7 +20,7 @@ class Client extends HttpClient implements APIClient
   /**
    * @return string|null
    */
-  public function getConnectionName()
+  public function getConnectionName(): ?string
   {
     return $this->connection;
   }
@@ -29,7 +29,7 @@ class Client extends HttpClient implements APIClient
    * @param string|null $name
    * @return static
    */
-  public function setConnectionName(?string $name)
+  public function setConnectionName(?string $name): static
   {
     $this->connection = $name;
     return $this;
