@@ -9,11 +9,11 @@ interface APIClient extends HttpClient
   /**
    * @return string|null
    */
-  public function getConnectionName(): ?string;
+  public function getConnectionName ();
 
   /**
    * @param string|null $name
    * @return static
    */
-  public function setConnectionName(?string $name): static;
+  public function setConnectionName ($name);
 }

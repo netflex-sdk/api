@@ -20,29 +20,27 @@ class Client extends HttpClient implements APIClient
   /**
    * @return string|null
    */
-  public function getConnectionName(): ?string
+  public function getConnectionName()
   {
     return $this->connection;
   }
 
   /**
-   * @param string|null $name
+   * @param string|null $connection
    * @return static
    */
-  public function setConnectionName(?string $name): static
+  public function setConnectionName($connection)
   {
-    $this->connection = $name;
+    $this->connection = $connection;
     return $this;
   }
+
+  /** @var String */
+  const BASE_URI = 'https://api.netflexapp.com/v1/';
 
   public static function connection($connection = 'default')
   {
     return APIClientConnectionResolver::resolve($connection);
-  }
-
-  protected static function defaultBaseUri(): string
-  {
-    return config('api.baseUri', 'https://api.netflexapp.com/v1/');
   }
 
   public static function withCredentials($credentials)
@@ -54,28 +52,23 @@ class Client extends HttpClient implements APIClient
 
   /**
    * @param array $options
-   * @throws MissingCredentialsException
    */
   public function __construct(array $options = [])
   {
-    $options['base_uri'] ??= static::defaultBaseUri();
-    $options['auth'] ??= null;
+    parent::__construct($options);
+    $this->setCredentials($options);
+  }
+
+  public function setCredentials(array $options = [])
+  {
+    $options['base_uri'] = $options['base_uri'] ?? static::BASE_URI;
+    $options['auth'] = $options['auth'] ?? null;
 
     if (!$options['auth']) {
       throw new MissingCredentialsException;
     }
 
-    parent::__construct($options);
-  }
-
-  /**
-   * @param array $options
-   * @return GuzzleClient
-   * @throws MissingCredentialsException
-   */
-  public function setCredentials(array $options = []): GuzzleClient
-  {
-    $this->client = (new static($options))->client;
+    $this->client = new GuzzleClient($options);
 
     return $this->client;
   }

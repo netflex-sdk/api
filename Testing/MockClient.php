@@ -5,7 +5,7 @@ namespace Netflex\API\Testing;
 use Netflex\API\Contracts\APIClient;
 use Netflex\Http\Concerns\ParsesResponse;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException as Exception;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -13,44 +13,45 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\RequestException;
 
 use Illuminate\Support\Traits\Macroable;
-use Psr\Http\Message\RequestInterface;
 
 class MockClient implements APIClient
 {
   use ParsesResponse;
   use Macroable;
 
-  protected Client $client;
+  /** @var Client */
+  protected $client;
 
-  protected MockHandler $mock;
+  /** @var MockHandler */
+  protected $mock;
 
-  protected HandlerStack $stack;
+  /** @var HandlerStack */
+  protected $stack;
 
-  protected string $connectionName = 'mock';
+  protected $connection = 'mock';
 
   public function __construct()
   {
     $this->mock = new MockHandler();
     $this->stack = HandlerStack::create($this->mock);
-    $this->client = new Client(['handler' => $this->stack]);
+    $this->client = new GuzzleClient(['handler' => $this->stack]);
   }
 
   /**
    * @return string|null
    */
-  public function getConnectionName(): ?string
+  public function getConnectionName ()
   {
-    return $this->connectionName;
+    return $this->connection;
   }
 
   /**
-   * @param string|null $name
+   * @param string|null $connection
    * @return static
    */
-  public function setConnectionName(?string $name): static
+  public function setConnectionName ($connection)
   {
-    $this->connectionName = $name;
-
+    $this->connection = $connection;
     return $this;
   }
 
@@ -60,7 +61,7 @@ class MockClient implements APIClient
    * @param Response $response
    * @return void
    */
-  public function mockResponse(Response $response): void
+  public function mockResponse(Response $response)
   {
     $this->mock->append($response);
   }
@@ -71,7 +72,7 @@ class MockClient implements APIClient
    * @param RequestException $e
    * @return void
    */
-  public function mockRequestException(RequestException $e): void
+  public function mockRequestException(RequestException $e)
   {
     $this->mock->append($e);
   }
@@ -81,7 +82,7 @@ class MockClient implements APIClient
    *
    * @return void
    */
-  public function reset(): void
+  public function reset()
   {
     $this->mock->reset();
   }
@@ -92,29 +93,11 @@ class MockClient implements APIClient
    * @return mixed
    * @throws Exception
    */
-  public function get(string $url, bool $assoc = false): mixed
+  public function get($url, $assoc = false)
   {
     return $this->parseResponse(
       $this->client->get($url),
-      $assoc,
-    );
-  }
-
-  /**
-   * @param string $url
-   * @param array|null $payload = []
-   * @param boolean $assoc = false
-   * @return mixed
-   * @throws Exception
-   */
-  public function put(
-    string $url,
-    array|null $payload = [],
-    bool $assoc = false,
-  ): mixed {
-    return $this->parseResponse(
-      $this->client->put($url, ['json' => $payload]),
-      $assoc,
+      $assoc
     );
   }
 
@@ -125,40 +108,39 @@ class MockClient implements APIClient
    * @return mixed
    * @throws Exception
    */
-  public function post(string $url, $payload = [], bool $assoc = false): mixed
+  public function put($url, $payload = [], $assoc = false)
   {
     return $this->parseResponse(
-      $this->client->post($url, ['json' => $payload]),
-      $assoc,
+      $this->client->put($url, ['json' => $payload]),
+      $assoc
     );
   }
 
   /**
    * @param string $url
-   * @param array|null $payload
-   * @param bool $assoc
+   * @param array $payload = []
+   * @param boolean $assoc = false
    * @return mixed
    * @throws Exception
    */
-  public function delete(
-    string $url,
-    array|null $payload = null,
-    bool $assoc = false,
-  ): mixed {
+  public function post($url, $payload = [], $assoc = false)
+  {
     return $this->parseResponse(
-      $this->client->delete($url),
-      $assoc,
+      $this->client->post($url, ['json' => $payload]),
+      $assoc
     );
   }
 
-  public function send(
-    RequestInterface $request,
-    array $options = [],
-    bool $assoc = false,
-  ) {
+  /**
+   * @param string $url
+   * @return mixed
+   * @throws Exception
+   */
+  public function delete($url, $assoc = false)
+  {
     return $this->parseResponse(
-      $this->client->send($request, $options),
-      $assoc,
+      $this->client->delete($url),
+      $assoc
     );
   }
 }
